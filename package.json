@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "version": "0.0.1",
+  "description": "This is a Javascript Game Engine for my Youtube channel.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/je3f0o/GameEngine.git"
+  },
+  "keywords": [],
+  "author": "je3f0o",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/je3f0o/GameEngine/issues"
+  },
+  "homepage": "https://github.com/je3f0o/GameEngine"
+}

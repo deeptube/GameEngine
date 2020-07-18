@@ -1,0 +1,41 @@
+<style>
+  #canvas {
+    border: 2px solid rgb(0, 0, 0);
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+    display: block;
+  }
+  #game_title {
+     text-align: center;
+  }
+</style>
+
+<h1 id="game_title">Asteroids</h1>
+<canvas id="canvas"></canvas>
+
+<!-- Libraries -->
+<!-- Vector math -->
+<script type="text/javascript" src="/src/math/clamp.js"></script>
+<script type="text/javascript" src="/src/math/to_radian.js"></script>
+<script type="text/javascript" src="/src/math/vector2.js"></script>
+<script type="text/javascript" src="/src/math/transformation_matrix_2dh.js"></script>
+
+<!-- Utils -->
+<script type="text/javascript" src="/src/utils/virtual_method.js"></script>
+<script type="text/javascript" src="/src/utils/interface.js"></script>
+
+<!-- Interfaces -->
+<script type="text/javascript" src="/src/interfaces/i_event_target.js"></script>
+<script type="text/javascript" src="/src/interfaces/i_game_object.js"></script>
+
+<!-- Renderables -->
+<script type="text/javascript" src="/src/renderables/draw_grid.js"></script>
+<script type="text/javascript" src="/src/renderables/draw_axis.js"></script>
+
+<!-- Event handlers -->
+<script type="text/javascript" src="/src/event_handlers/keyboard_binder.js"></script>
+
+<!-- Game -->
+<script type="text/javascript" src="space_ship.js"></script>
+<script type="text/javascript" src="main.js"></script>
