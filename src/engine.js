@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : engine.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-22
+* Updated at  : 2020-07-23
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -10,7 +10,7 @@
 // ignore:start
 "use strict";
 
-/* globals*/
+/* globals TransformationMatrix2DH*/
 /* exported Engine*/
 
 // ignore:end
@@ -19,16 +19,12 @@ function create_canvas (width, height) {
     const canvas  = document.createElement("canvas");
     canvas.width  = width;
     canvas.height = height;
-
-    const context = canvas.getContext("2d");
-    context.translate(width / 2, height / 2);
-    context.scale(1, -1);
-
-    return { canvas, context };
+    return canvas;
 }
 
 class Engine {
     constructor (wrapper_element, options = {}) {
+        this.game_objects    = [];
         this.wrapper_element = wrapper_element;
 
         const width  = wrapper_element.clientWidth;
@@ -38,19 +34,29 @@ class Engine {
         this.half_height = height / 2;
 
         // Create canvas
-        const {canvas, context} = create_canvas(width, height);
-        this.canvas  = canvas;
-        this.context = context;
+        this.canvas  = create_canvas(width, height);
+        this.context = this.canvas.getContext("2d");
+
+        this.transform = new TransformationMatrix2DH();
+        this.transform.translate(this.half_width, this.half_height);
+        this.transform.scale(1, -1);
+
+        // Event handlers
+        this.canvas.setAttribute("tabindex", 0);
+        const event_handler = event => {
+            for (const game_object of this.game_objects) {
+                game_object.dispatchEvent(event.type, event);
+            }
+        };
+
+        this.canvas.addEventListener("keyup"  , event_handler);
+        this.canvas.addEventListener("keydown", event_handler);
 
         wrapper_element.appendChild(this.canvas);
 
         // Setup options
         this.options = {};
         this.set_option("use_double_buffer", options.use_double_buffer);
-
-        //
-
-        this.game_objects = [];
     }
 
     set_option (option, value) {
@@ -58,10 +64,9 @@ class Engine {
             case "use_double_buffer":
                 if (value) {
                     if (! this.back_context) {
-                        const {width, height}   = this.canvas;
-                        const {canvas, context} = create_canvas(width, height);
-                        this.back_canvas  = canvas;
-                        this.back_context = context;
+                        const {width, height} = this.canvas;
+                        this.back_canvas  = create_canvas(width, height);
+                        this.back_context = this.back_canvas.getContext("2d");
                     }
                     this.options.use_double_buffer = true;
                 } else {
@@ -87,8 +92,12 @@ class Engine {
             }
             last_timestamp = current_timestamp;
 
-            // clear context
+            // Reset and transform matrix to cartesian coordinate system
             const context = this.back_context || this.context;
+            const {a,b,c,d,e,f} = this.transform;
+            context.setTransform(a,b,c,d,e,f);
+
+            // clear context
             context.clearRect(
                 -this.half_width   ,  this.half_height,
                  this.canvas.width , -this.canvas.height
@@ -96,14 +105,13 @@ class Engine {
 
             // update
             for (const game_object of this.game_objects) {
-                game_object.update(delta_time);
+                game_object.update(delta_time, this);
             }
 
             // draw
             for (const game_object of this.game_objects) {
                 game_object.draw(context);
             }
-            //this.back_context.fillRect(-400, 300, 800, -600);
 
             // swap buffer
             if (this.back_canvas) { this.swap_buffer(); }
@@ -120,28 +128,9 @@ class Engine {
     }
 
     swap_buffer () {
-        this.context.save();
-        this.context.scale(1, -1);
-        this.context.translate(-this.half_width, -this.half_height);
+        this.back_context.setTransform(1,0,0,1,0,0);
         this.context.clearRect(0, 0, this.canvas.width , this.canvas.height);
-
-        this.back_context.save();
-        this.back_context.scale(1, -1);
-        this.back_context.translate(-this.half_width, -this.half_height);
-
-        /*
-        this.context.clearRect(
-            -this.half_width   ,  this.half_height,
-             this.canvas.width , -this.canvas.height
-        );
-        */
-        this.context.drawImage(
-             this.back_canvas,
-             0, 0
-        );
-
-        this.context.restore();
-        this.back_context.restore();
+        this.context.drawImage(this.back_canvas, 0, 0);
     }
 }
 

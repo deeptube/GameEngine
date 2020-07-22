@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
-* File Name   : matrix_2dh.js
+* File Name   : transformation_matrix_2dh.js
 * Created at  : 2019-05-02
-* Updated at  : 2019-05-02
+* Updated at  : 2020-07-23
 * Author      : jeefo
 * Purpose     :
 * Description :
