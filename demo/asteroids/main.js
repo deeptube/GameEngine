@@ -1,21 +1,33 @@
-
+/* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
+* File Name   : main.js
+* Created at  : 2020-07-22
+* Updated at  : 2020-07-22
+* Author      : jeefo
+* Purpose     :
+* Description :
+* Reference   :
+.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.*/
+// ignore:start
 "use strict";
 
-let canvas  = document.getElementById("canvas");
-let context = canvas.getContext("2d");
+/* globals Engine, SpaceShip, Vector2*/
+/* exported*/
 
-let width       = 800;
-let height      = 600;
-let half_width  = width  / 2;
-let half_height = height / 2;
+// ignore:end
 
-canvas.width  = width;
-canvas.height = height;
+const engine = new Engine(document.getElementById("game"), {
+    use_double_buffer: true,
+});
 
+const ship = new SpaceShip(new Vector2(), 10);
+ship.line_width = 2;
+
+engine.game_objects.push(ship);
+
+engine.start();
+
+/*
 let grid_size = 100;
-
-context.translate(half_width, half_height);
-context.scale(1, -1);
 
 let ship = new SpaceShip(new Vector2(), 10);
 ship.line_width = 2;
@@ -77,3 +89,4 @@ function main_loop (current_timestamp) {
 
 // Start main loop
 requestAnimationFrame(main_loop);
+*/

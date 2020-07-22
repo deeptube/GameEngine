@@ -1,18 +1,19 @@
 <style>
-  #canvas {
-    border: 2px solid rgb(0, 0, 0);
-    width: 800px;
-    height: 600px;
-    margin: 0 auto;
-    display: block;
-  }
   #game_title {
      text-align: center;
+  }
+  #game {
+      border : 2px solid rgb(0, 0, 0);
+      width  : 800px;
+      height : 600px;
+      margin : 0 auto;
+      display: block;
+      position: relative;
   }
 </style>
 
 <h1 id="game_title">Asteroids</h1>
-<canvas id="canvas"></canvas>
+<div id="game"></div>
 
 <!-- Libraries -->
 <!-- Vector math -->
@@ -28,6 +29,9 @@
 <!-- Interfaces -->
 <script type="text/javascript" src="/src/interfaces/i_event_target.js"></script>
 <script type="text/javascript" src="/src/interfaces/i_game_object.js"></script>
+
+<!-- Engine -->
+<script type="text/javascript" src="/src/engine.js"></script>
 
 <!-- Renderables -->
 <script type="text/javascript" src="/src/renderables/draw_grid.js"></script>
