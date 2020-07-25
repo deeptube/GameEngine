@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : engine.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-23
+* Updated at  : 2020-07-25
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -38,7 +38,7 @@ class Engine {
         this.context = this.canvas.getContext("2d");
 
         this.transform = new TransformationMatrix2DH();
-        this.transform.translate(this.half_width, this.half_height);
+        this.transform.translate(this.half_width + 0.5, this.half_height + 0.5);
         this.transform.scale(1, -1);
 
         // Event handlers

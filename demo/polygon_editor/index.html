@@ -1,0 +1,43 @@
+<style>
+  #game_title {
+     text-align: center;
+  }
+  #game {
+      border : 2px solid rgb(0, 0, 0);
+      width  : 800px;
+      height : 600px;
+      margin : 0 auto;
+      display: block;
+      position: relative;
+  }
+</style>
+
+<h1 id="game_title">Polygon Editor</h1>
+<div id="game"></div>
+
+<!-- Libraries -->
+<!-- Vector math -->
+<script type="text/javascript" src="/src/math/clamp.js"></script>
+<script type="text/javascript" src="/src/math/to_radian.js"></script>
+<script type="text/javascript" src="/src/math/vector2.js"></script>
+<script type="text/javascript" src="/src/math/transformation_matrix_2dh.js"></script>
+
+<!-- Utils -->
+<script type="text/javascript" src="/src/utils/virtual_method.js"></script>
+<script type="text/javascript" src="/src/utils/interface.js"></script>
+<script type="text/javascript" src="/src/key_codes.js"></script>
+
+<!-- Interfaces -->
+<script type="text/javascript" src="/src/interfaces/i_event_target.js"></script>
+<script type="text/javascript" src="/src/interfaces/i_game_object.js"></script>
+
+<!-- Engine -->
+<script type="text/javascript" src="/src/engine.js"></script>
+
+<!-- Renderables -->
+<script type="text/javascript" src="/src/renderables/grid.js"></script>
+<script type="text/javascript" src="/src/renderables/axis.js"></script>
+
+<!-- Polygon editor -->
+<script type="text/javascript" src="point.js"></script>
+<script type="text/javascript" src="main.js"></script>
