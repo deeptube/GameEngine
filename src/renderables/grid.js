@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : grid.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-26
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -19,12 +19,13 @@ class Grid extends IGameObject {
     constructor (options) {
         super(new Vector2(options.x, options.y));
         this.size   = options.size;
-        //this.color  = options.color;
+        this.color  = options.color || "black";
         this.width  = options.width;
         this.height = options.height;
     }
 
     draw (context) {
+        context.save();
         context.beginPath();
 
         const x_end = this.position.x + this.width;
@@ -40,23 +41,8 @@ class Grid extends IGameObject {
             context.lineTo(x, y_end);
         }
 
+        context.strokeStyle = this.color;
         context.stroke();
-
-        /*
-        context.beginPath();
-        context.strokeStyle = color;
-
-        for (var x = -half_width; x < half_width; x += grid_size) {
-            context.moveTo(x, -half_height);
-            context.lineTo(x,  half_height);
-        }
-
-        for (var y = -half_height; y < half_height; y += grid_size) {
-            context.moveTo(-half_width, y);
-            context.lineTo( half_width, y);
-        }
-
-        context.stroke();
-        */
+        context.restore();
     }
 }

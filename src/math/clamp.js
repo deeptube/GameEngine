@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : clamp.js
 * Created at  : 2019-05-02
-* Updated at  : 2019-05-02
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -10,12 +10,10 @@
 // ignore:start
 "use strict";
 
-/* globals*/
-/* exported*/
+/* globals min, max*/
+/* exported clamp*/
 
 // ignore:end
-
-const { min, max } = Math;
 
 /**
  * Clamps the given value between the given minimum and maximum values range.
@@ -28,4 +26,6 @@ const { min, max } = Math;
  *
  * @returns {number} - Result between the min and max values.
  */
-const clamp = (value, min_value, max_value) => min(max(value, min_value), max_value);
+const clamp = (value, min_value, max_value) => {
+    return min(max(value, min_value), max_value);
+};

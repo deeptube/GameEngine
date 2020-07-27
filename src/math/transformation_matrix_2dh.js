@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : transformation_matrix_2dh.js
 * Created at  : 2019-05-02
-* Updated at  : 2020-07-23
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -10,12 +10,10 @@
 // ignore:start
 "use strict";
 
-/* globals*/
+/* globals abs, cos, sin, to_radian, Vector2*/
 /* exported*/
 
 // ignore:end
-
-const { abs } = Math;
 
 // Compares floating point values with some tolerance (epsilon)
 const is_equal = (f1, f2) => abs(f1 - f2) < 1e-14;
@@ -81,7 +79,7 @@ class TransformationMatrix2DH {
      * @param {number} angle - Angle in degrees
      */
     rotate_by_degrees (angle_in_degrees) {
-        return this.rotate(to_radians(angle_in_degrees));
+        return this.rotate(to_radian(angle_in_degrees));
     }
 
     /**
@@ -372,4 +370,4 @@ class TransformationMatrix2DH {
             m1.f + (m2.f - m1.f) * range
         );
     }
-};
+}

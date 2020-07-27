@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : i_game_object.js
 * Created at  : 2020-07-19
-* Updated at  : 2020-07-19
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -16,12 +16,14 @@
 // ignore:end
 
 class IGameObject extends IEventTarget {
-    constructor (position = new Vector2()) {
+    constructor ({x, y}) {
         super(IGameObject);
-        this.position = position;
+        this.position = new Vector2(x, y);
     }
 
-    update () {}
+    initialize () {}
+    destroy () {}
 
+    update () {}
     draw () { virtual_method(); }
 }

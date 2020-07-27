@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : vector2.js
 * Created at  : 2017-10-02
-* Updated at  : 2019-05-09
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -9,12 +9,10 @@ _._._._._._._._._._._._._._._._._._._._._.*/
 // ignore:start
 "use strict";
 
-/* globals*/
+/* globals min, max, cos, sin, sqrt, atan2*/
 /* exported*/
 
 // ignore:end
-
-const { cos, sin, sqrt, atan2 } = Math;
 
 class Vector2 {
     /**

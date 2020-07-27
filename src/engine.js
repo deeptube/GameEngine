@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : engine.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-25
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -10,7 +10,7 @@
 // ignore:start
 "use strict";
 
-/* globals TransformationMatrix2DH*/
+/* globals TransformationMatrix2DH, Vector2*/
 /* exported Engine*/
 
 // ignore:end
@@ -43,15 +43,6 @@ class Engine {
 
         // Event handlers
         this.canvas.setAttribute("tabindex", 0);
-        const event_handler = event => {
-            for (const game_object of this.game_objects) {
-                game_object.dispatchEvent(event.type, event);
-            }
-        };
-
-        this.canvas.addEventListener("keyup"  , event_handler);
-        this.canvas.addEventListener("keydown", event_handler);
-
         wrapper_element.appendChild(this.canvas);
 
         // Setup options
@@ -105,7 +96,7 @@ class Engine {
 
             // update
             for (const game_object of this.game_objects) {
-                game_object.update(delta_time, this);
+                game_object.update(delta_time);
             }
 
             // draw
@@ -131,6 +122,23 @@ class Engine {
         this.back_context.setTransform(1,0,0,1,0,0);
         this.context.clearRect(0, 0, this.canvas.width , this.canvas.height);
         this.context.drawImage(this.back_canvas, 0, 0);
+    }
+
+    add_game_object (game_object) {
+        game_object.initialize(this);
+        this.game_objects.push(game_object);
+    }
+
+    remove_game_object (game_object) {
+        const index = this.game_objects.indexOf(game_object);
+        if (index !== -1) {
+            this.game_objects[index].destroy();
+            this.game_objects.splice(index, 1);
+        }
+    }
+
+    to_world_coordinate (x, y) {
+        return new Vector2(x - this.half_width, this.half_height - y);
     }
 }
 

@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : main.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-22
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -22,7 +22,7 @@ const engine = new Engine(document.getElementById("game"), {
 const ship = new SpaceShip(new Vector2(), 10);
 ship.line_width = 2;
 
-engine.game_objects.push(ship);
+engine.add_game_object(ship);
 
 engine.start();
 

@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : main.js
 * Created at  : 2020-07-22
-* Updated at  : 2020-07-26
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -10,23 +10,42 @@
 // ignore:start
 "use strict";
 
-/* globals Engine, Grid, Axis, Point*/
+/* globals Engine, Grid, Axis, Circle*/
 /* exported*/
 
 // ignore:end
 
-const wrapper_element = document.getElementById("game");
+let closest_circle;
+const radius           = 3;
+const grid_size        = 50;
+const pre_element      = document.querySelector("pre");
+const wrapper_element  = document.getElementById("game");
+const selected_circles = [];
+
+const update_ui = () => {
+    const vectors = selected_circles.map(c => c.position);
+    pre_element.textContent = JSON.stringify(vectors, null, 4);
+};
 
 const engine = new Engine(wrapper_element, {
     use_double_buffer: true,
 });
 
-const grid_size = 50;
+const get_closest_circle = event => {
+    const x_length = Math.round(event.offsetX / grid_size);
+    const y_length = Math.round(event.offsetY / grid_size);
+    if (x_length && x_length <= 15 && y_length && y_length <= 11) {
+        const index    = 2 + (y_length - 1) * 15 + x_length - 1;
+        return engine.game_objects[index];
+    }
+    return null;
+};
 
 const grid = new Grid({
     x      : -engine.half_width,
     y      : engine.half_height,
     size   : grid_size,
+    color  : "rgba(0,0,0, 0.2)",
     width  : engine.canvas.width,
     height : engine.canvas.height,
 });
@@ -39,83 +58,48 @@ const axis = new Axis({
     y_color    : "red",
 });
 
-engine.game_objects.push(grid);
-engine.game_objects.push(axis);
+engine.add_game_object(grid);
+engine.add_game_object(axis);
 
 for (let y = engine.half_height - grid_size; y > -engine.half_height; y -= grid_size) {
     for (let x = -engine.half_width + grid_size; x < engine.half_width; x += grid_size) {
-        const options = {
-            x, y,
-            style  : "stroke",
-            radius : 5,
-        };
-        engine.game_objects.push(new Point(options));
+        engine.add_game_object(new Circle({x,y}, radius));
     }
 }
 
+engine.canvas.addEventListener("mousemove", event => {
+    if (closest_circle && ! closest_circle.is_selected) {
+        closest_circle.radius        = radius;
+        closest_circle.options.style = "stroke";
+    }
+
+    closest_circle = get_closest_circle(event);
+    if (closest_circle) {
+        const {x, y} = engine.to_world_coordinate(event.offsetX, event.offsetY);
+        if (closest_circle.is_colided(x, y)) {
+            closest_circle.radius = 5;
+        }
+    }
+});
+
+engine.canvas.addEventListener("click", event => {
+    const closest_circle = get_closest_circle(event);
+    if (closest_circle) {
+        const {x, y} = engine.to_world_coordinate(event.offsetX, event.offsetY);
+        if (closest_circle.is_colided(x, y)) {
+            closest_circle.is_selected = ! closest_circle.is_selected;
+            if (closest_circle.is_selected) {
+                closest_circle.radius        = 5;
+                closest_circle.options.style = "fill";
+                selected_circles.push(closest_circle);
+            } else {
+                const index = selected_circles.indexOf(closest_circle);
+                selected_circles.splice(index, 1);
+            }
+
+            update_ui();
+        }
+    }
+});
+
 engine.start();
-
-/*
-let grid_size = 100;
-
-let ship = new SpaceShip(new Vector2(), 10);
-ship.line_width = 2;
-
-let keyboard_binder = new KeyboardBinder(document);
-
-
-const MAX_VELOCITY  = 120;
-const MIN_VELOCITY  = 0;
-const ACCELERATION  = MAX_VELOCITY * 3;
-const ANGULAR_SPEED = 1.5;
-const VELOCITY_DRAG = 0.01;
-
-let new_velocity;
-let last_timestamp = 0;
-
-// Game Loop 0.016
-function main_loop (current_timestamp) {
-	let delta_time = (current_timestamp - last_timestamp) / 1000;
-
-	// 1. clear screen
-	context.clearRect(-half_width, half_height, width, -height);
-
-	draw_grid(context, grid_size, half_width, half_height, "rgba(0, 0, 0, 0.3)");
-	draw_axis(context, Math.max(half_width, half_height), "black");
-
-	// 2. update
-	// Linear movement
-	if (keyboard_binder.is_key_down(KEY_UP)) {
-		let direction_to_accelerate = new Vector2(-Math.sin(ship.orientation), Math.cos(ship.orientation));
-		let delta_velocity = Vector2.scale(direction_to_accelerate, ACCELERATION * delta_time);
-
-		ship.velocity.add(delta_velocity);
-	} else {
-		ship.velocity.scale(1 - VELOCITY_DRAG);
-	}
-
-	// Angular movement
-	if (keyboard_binder.is_key_down(KEY_RIGHT)) {
-		ship.orientation -= ANGULAR_SPEED * delta_time;
-	}
-	if (keyboard_binder.is_key_down(KEY_LEFT)) {
-		ship.orientation += ANGULAR_SPEED * delta_time;
-	}
-
-	// Debug
-	if (keyboard_binder.is_key_down(KEY_SPACE)) {
-		console.log(ship.velocity);
-	}
-	ship.update(delta_time);
-
-	// 3. draw
-	ship.draw(context);
-
-	// 4. goto step 1
-	last_timestamp = current_timestamp;
-	requestAnimationFrame(main_loop);
-};
-
-// Start main loop
-requestAnimationFrame(main_loop);
-*/

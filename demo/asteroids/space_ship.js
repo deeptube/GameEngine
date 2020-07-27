@@ -1,7 +1,7 @@
 /* -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 * File Name   : space_ship.js
 * Created at  : 2020-07-19
-* Updated at  : 2020-07-23
+* Updated at  : 2020-07-28
 * Author      : jeefo
 * Purpose     :
 * Description :
@@ -56,9 +56,11 @@ class SpaceShip extends IGameObject {
 		];
 
         this.transformed_points = this.points.map(p => p.clone());
+    }
 
+    initialize (engine) {
         // Keydown event handler
-        this.addEventListener("keydown", event => {
+        this.on_keydown = event => {
             switch (event.keyCode) {
                 case KEY.ARROW_UP :
                     this.is_accelerating = true;
@@ -70,10 +72,8 @@ class SpaceShip extends IGameObject {
                     this.is_rotating_right = true;
                     break;
             }
-        });
-
-        // Keyup event handler
-        this.addEventListener("keyup", event => {
+        };
+        this.on_keyup = event => {
             switch (event.keyCode) {
                 case KEY.ARROW_UP :
                     this.is_accelerating = false;
@@ -85,10 +85,21 @@ class SpaceShip extends IGameObject {
                     this.is_rotating_right = false;
                     break;
             }
-        });
+        };
+
+        engine.canvas.addEventListener("keyup"  , this.on_keyup);
+        engine.canvas.addEventListener("keydown", this.on_keydown);
+        this.engine = engine;
     }
 
-    update (delta_time, engine) {
+    destroy () {
+        this.engine.canvas.removeEventListener("keyup"  , this.on_keyup);
+        this.engine.canvas.removeEventListener("keydown", this.on_keydown);
+    }
+
+    update (delta_time) {
+        const {engine} = this;
+
         // Angular transformation
         if (this.is_rotating_right) {
             this.orientation -= ANGULAR_SPEED * delta_time;
